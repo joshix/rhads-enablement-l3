@@ -84,7 +84,7 @@ So, let's open our  https://admin-terminal-ttyd.{openshift_cluster_ingress_domai
 [source,bash,role=execute,subs=attributes+]
 ----
 cd /workspace
-cosign initialize --mirror=$TUF_URL --root=$TUF_URL/root.json
+cosign initialize
 ----
 
 include::partial$tas-realm-override.adoc[]

@@ -97,16 +97,16 @@ You should now have a new terminal https://admin-terminal-ttyd.{openshift_cluste
 
 We have just asked you to start with a fresh "Podman Terminal" - therefore, you need to initialize (meaning: download) a fresh *Trust Root* from the Red Hat Trusted Artifact Signer TUF (The Update Framework) endpoint.
 
-We have done this before - it's a call of `cosign initialize`, pointed at the `TUF_URL` of your RHTAS instance (you can check the environment variables pointing to it by typing `help`). `cosign` 3.x no longer picks the mirror up from `COSIGN_MIRROR` / `COSIGN_ROOT` on its own, so we pass it explicitly - otherwise it would quietly fetch the *public* Sigstore trust root instead of ours.
+We have done this before - it's a simple call of `cosign initialize`, which uses the `COSIGN_MIRROR` and `COSIGN_ROOT` environment variables (you can check the environment variables pointing to your RHTAS instance by typing `help`).
 
 IMPORTANT: Do this in your "Podman Terminal" that we just deployed - we will exclusively use the "Podman Terminal" in the exercises! 
 
 [source,bash,role=execute,subs=attributes+]
 ----
-cosign initialize --mirror=$TUF_URL --root=$TUF_URL/root.json
+cosign initialize
 ----
 
-This creates the *Trust Root* structure in your user's home directory (under `~/.sigstore`) that verification commands in the next chapters need. The directory it creates under `~/.sigstore/root/` is named after the mirror, so it is also the quickest way to confirm you got *your* trust root and not the public one.
+This creates the *Trust Root* structure in your user's home directory (under `~/.sigstore`) that verification commands in the next chapters need. `cosign` 3.x prints nothing when it succeeds, so if you want to confirm it used *your* TUF endpoint and not the public Sigstore one, read `~/.sigstore/root/remote.json`.
 
 include::partial$tas-realm-override.adoc[]
 

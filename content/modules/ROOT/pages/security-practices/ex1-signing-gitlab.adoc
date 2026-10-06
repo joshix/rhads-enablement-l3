@@ -16,7 +16,7 @@ sign-image:
     SIGSTORE_ID_TOKEN:
       aud: trusted-artifact-signer
   before_script:
-    - cosign initialize --mirror=$COSIGN_MIRROR --root=$COSIGN_ROOT
+    - cosign initialize
   script:
     - cosign sign $CI_REGISTRY_IMAGE:$CI_COMMIT_SHA
 

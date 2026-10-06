@@ -28,7 +28,7 @@ jobs:
         # dynamically from the TAS cli-server endpoints 
 
       - name: Initialize Cosign
-        run: cosign initialize --mirror=$COSIGN_MIRROR --root=$COSIGN_ROOT
+        run: cosign initialize
       
       - name: Login to registry
         uses: docker/login-action@v3
