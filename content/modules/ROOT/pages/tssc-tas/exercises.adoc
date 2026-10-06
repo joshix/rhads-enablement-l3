@@ -108,4 +108,6 @@ cosign initialize --mirror=$TUF_URL --root=$TUF_URL/root.json
 
 This creates the *Trust Root* structure in your user's home directory (under `~/.sigstore`) that verification commands in the next chapters need. The directory it creates under `~/.sigstore/root/` is named after the mirror, so it is also the quickest way to confirm you got *your* trust root and not the public one.
 
+include::partial$tas-realm-override.adoc[]
+
 
