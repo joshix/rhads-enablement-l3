@@ -377,12 +377,19 @@ As the first step, we need to "initialize" `cosign` - this downloads public trus
 
 [source,bash,role=execute,subs=attributes+]
 ----
-cosign initialize
+cosign initialize --mirror=$TUF_URL --root=$TUF_URL/root.json
 ----
+
+[NOTE]
+====
+`cosign` 3.x no longer reads `COSIGN_MIRROR` and `COSIGN_ROOT` from the environment. Left to itself, it initializes against the *public* Sigstore TUF repository at `tuf-repo-cdn.sigstore.dev` - and because the certificate our Fulcio issues was logged in our own Certificate Transparency log, signing then fails at the very last step with `only able to verify 0 SCT entries; unable to meet threshold of 1`. That error names the CT log, not TUF, so it is easy to mistake for a broken TAS deployment.
+
+Passing `--mirror` and `--root` explicitly points `cosign` at the TAS instance our environment variables already describe. To check which trust root you ended up with, look at the directory name under `~/.sigstore/root/` - it is named after the mirror it came from.
+====
 
 [source,console]
 ----
-podman-terminal:/workspace$ cosign initialize
+podman-terminal:/workspace$ cosign initialize --mirror=$TUF_URL --root=$TUF_URL/root.json
 WARNING: Fetching initial root from URL without providing its checksum is deprecated and will be disallowed in a future Cosign release. Please provide the initial root checksum via the --root-checksum argument.
 Root status: 
  {
@@ -781,10 +788,8 @@ For convenience, we'll include the commands for setting the environment to our T
 IMAGE_NAME="ttl.sh/rhtas/test-image-{guid}:1h"
 cd /workspace
 source ~/setup-tas-environment.sh student-tas
-cosign initialize
+cosign initialize --mirror=$TUF_URL --root=$TUF_URL/root.json
 echo "FROM scratch" > ./tmp.Dockerfile
-UUID=$(uuidgen | cut -d'-' -f1)
-IMAGE_NAME="ttl.sh/rhtas/test-image-${UUID}:1h"
 podman build . -f ./tmp.Dockerfile -t $IMAGE_NAME
 podman push $IMAGE_NAME
 cosign sign -y --use-signing-config=false $IMAGE_NAME

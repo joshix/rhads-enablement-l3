@@ -26,11 +26,11 @@ The PolicyController CR defines the global behaviour of the Admission Controller
 If you went through previous RHTAS chapters and exercises, the name "Trust Root" should ring a bell.
 The Trust Root is the collection and configuration of public certificates of the various services that Trusted Artifact Signer provides, such as Fulcio (the Certificate Issuer) and Rekor (the Transparency Database).
 
-When you issue a `cosign initialize`, a Trust Root is obtained from the TUF (The Update Framework) endpoint of the TAS installation and stored in the user's home directory `~/.sigstore`. 
+When you issue a `cosign initialize --mirror=$TUF_URL --root=$TUF_URL/root.json`, a Trust Root is obtained from the TUF (The Update Framework) endpoint of the TAS installation and stored in the user's home directory `~/.sigstore`. The mirror has to be named explicitly: `cosign` 3.x defaults to the *public* Sigstore TUF repository and no longer honours `COSIGN_MIRROR` / `COSIGN_ROOT`, so a bare `cosign initialize` would store the public trust root here instead of this installation's - note the `remote` field below.
 
 [source,json]
 ----
-podman-terminal:/workspace/l3-enablement-helpers$ cosign initialize
+podman-terminal:/workspace/l3-enablement-helpers$ cosign initialize --mirror=$TUF_URL --root=$TUF_URL/root.json
 Root status: 
  {
         "local": "/home/student/.sigstore/root",

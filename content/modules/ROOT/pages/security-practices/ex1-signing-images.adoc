@@ -62,12 +62,14 @@ NOTE: To check your current endpoints are configured correctly (pointing to the 
 
 [source,bash,role=execute,subs=attributes+]
 ----
-cosign initialize
+cosign initialize --mirror=$TUF_URL --root=$TUF_URL/root.json
 ----
+
+NOTE: `cosign` 3.x ignores `COSIGN_MIRROR` / `COSIGN_ROOT`, so the mirror has to be passed on the command line. Without it you get the *public* Sigstore trust root, and signing later fails with `only able to verify 0 SCT entries`.
 
 [source,console]
 ----
-podman-terminal:/workspace$ cosign initialize
+podman-terminal:/workspace$ cosign initialize --mirror=$TUF_URL --root=$TUF_URL/root.json
 WARNING: Fetching initial root from URL without providing its checksum is deprecated and will be disallowed in a future Cosign release. Please provide the initial root checksum via the --root-checksum argument.
 Root status: 
  {
